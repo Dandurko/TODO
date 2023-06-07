@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<link rel="stylesheet" th:href="@{/index.css}"/>
+<body>
+
+
+  <div class="container">
+    <div  id="tasks">
+      <div id="newtask">
+      <form th:action="@{/page/taskDetail/{taskId}(taskId=${task.id})}" th:object="${task}" method="post">
+        <input type="text" id="name" name="name" th:value="${task.name}" />
+        <button type="submit" id="push">Edit</button>
+        <a id="delete" onclick="" th:href="@{/page/taskDelete/{taskID}(taskID=${task.id})}" class ="anchor" >Delete</a>
+      </form>
+      </div>
+    </div>
+  </div>
+  
+<script th:src="@{/index.js}"></script>
+</body>
+</html>
