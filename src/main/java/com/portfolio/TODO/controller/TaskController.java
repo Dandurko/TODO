@@ -1,5 +1,6 @@
 package com.portfolio.TODO.controller;
 
+import com.portfolio.TODO.model.FinishedTask;
 import com.portfolio.TODO.model.Task;
 import com.portfolio.TODO.service.TaskServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.util.*;
 
 @Controller
@@ -16,11 +16,10 @@ import java.util.*;
 public class TaskController {
 
     @Autowired
-    TaskServiceImpl service;
-
+    TaskServiceImpl taskService;
     @GetMapping("/allTasks")
     public String getPage(Model model){
-        List tasks = service.getAllTask();
+        List tasks = taskService.getAllTask();
         Task task=new Task();
         model.addAttribute("tasks",tasks);
         model.addAttribute("task",task);
@@ -32,7 +31,7 @@ public class TaskController {
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
         task.setCreatedDate(currentTimestamp);
         task.setLastUpdate(currentTimestamp);
-        service.create(task);
+        taskService.create(task);
         return "redirect:/page/allTasks";
 
     }
@@ -42,7 +41,7 @@ public class TaskController {
 
     @GetMapping("/taskDetail/{taskId}")
     public String getTaskDetail(@PathVariable("taskId") Long taskId, Model model) {
-        Optional<Task> task = service.getDetailedTask(taskId);
+        Optional<Task> task = taskService.getDetailedTask(taskId);
         model.addAttribute("task", task.orElse(null)); // Použite .orElse(null), ak Optional je prázdny
         return "task-detail"; // Nemusíte uvádzať príponu .html
     }
@@ -50,13 +49,13 @@ public class TaskController {
 
     @PostMapping("/taskDetail/{taskId}")
     public String editTaskDetail(@PathVariable("taskId") Long taskId, @ModelAttribute("task") Task updatedTask) {
-        Optional<Task> existingTask = service.getDetailedTask(taskId);
+        Optional<Task> existingTask = taskService.getDetailedTask(taskId);
         if (existingTask.isPresent()) {
             Task task = existingTask.get();
             task.setLastUpdate(new Timestamp(System.currentTimeMillis()));
             // Ponechajte createdDate nezmenené
             task.setName(updatedTask.getName()); // Prípadne aktualizujte ďalšie vlastnosti úlohy podľa potreby
-            service.update(task);
+            taskService.update(task);
         }
         return "redirect:/page/allTasks";
     }
@@ -64,7 +63,16 @@ public class TaskController {
 
     @GetMapping("/taskDelete/{taskId}")
     public String taskDelete(@PathVariable("taskId") Long taskId) {
-        service.delete(taskId);
+        Optional<Task> existingTask = taskService.getDetailedTask(taskId);
+        if (existingTask.isPresent()) {
+            Task task = existingTask.get();
+            FinishedTask finished_task = new FinishedTask();
+            finished_task.setName(task.getName());
+            finished_task.setCreatedDate(task.getCreatedDate());
+            finished_task.setFinishedDate(new Timestamp(System.currentTimeMillis()));
+            taskService.createFinishedTask(finished_task);
+            taskService.delete(taskId);
+        }
         return "redirect:/page/allTasks";
     }
 
