@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<link rel="stylesheet" th:href="@{/index.css}"/>
+<body>
+
+<div class="container">
+    <div  id="tasks">
+
+        <div th:each="task: ${finishedTasks}">
+            <div id="date">
+                <div th:text="'created: ' + ${#dates.format(task.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                <div th:text="'finished: ' + ${#dates.format(task.finishedDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+            </div>
+            <div  class="task"  th:id="${task.id}" th:text="${task.name}"></div>
+        </div>
+    </div>
+    <a  onclick="" href="/page/allTasks" class ="anchor" >All Tasks</a>
+</div>
+</body>
+</html>

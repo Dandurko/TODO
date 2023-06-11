@@ -16,7 +16,7 @@
       <form th:action="@{/page/taskDetail/{taskId}(taskId=${task.id})}" th:object="${task}" method="post">
         <input type="text" id="name" name="name" th:value="${task.name}" />
         <button type="submit" id="push">Edit</button>
-        <a id="delete" onclick="" th:href="@{/page/taskDelete/{taskID}(taskID=${task.id})}" class ="anchor" >Delete</a>
+        <a  onclick="" th:href="@{/page/taskDelete/{taskID}(taskID=${task.id})}" class ="anchor" >Delete</a>
       </form>
       </div>
     </div>

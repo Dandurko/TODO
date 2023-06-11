@@ -14,8 +14,6 @@ import java.util.Optional;
 public class TaskServiceImpl implements TaskService{
     @Autowired
     TaskRepository taskRepo;
-    @Autowired
-    FinishedTaskRepository finishedTaskRepo;
 
     @Override
     public List<Task> getAllTask() {
@@ -25,11 +23,6 @@ public class TaskServiceImpl implements TaskService{
     @Override
     public void create(Task task) {
         taskRepo.save(task);
-    }
-
-    @Override
-    public void createFinishedTask(FinishedTask task) {
-        finishedTaskRepo.save(task);
     }
 
     @Override

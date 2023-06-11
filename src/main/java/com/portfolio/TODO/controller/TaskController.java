@@ -2,6 +2,7 @@ package com.portfolio.TODO.controller;
 
 import com.portfolio.TODO.model.FinishedTask;
 import com.portfolio.TODO.model.Task;
+import com.portfolio.TODO.service.FinishedTaskServiceImpl;
 import com.portfolio.TODO.service.TaskServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,9 @@ public class TaskController {
 
     @Autowired
     TaskServiceImpl taskService;
+
+    @Autowired
+    FinishedTaskServiceImpl finishedTaskService;
     @GetMapping("/allTasks")
     public String getPage(Model model){
         List tasks = taskService.getAllTask();
@@ -70,11 +74,17 @@ public class TaskController {
             finished_task.setName(task.getName());
             finished_task.setCreatedDate(task.getCreatedDate());
             finished_task.setFinishedDate(new Timestamp(System.currentTimeMillis()));
-            taskService.createFinishedTask(finished_task);
+            finishedTaskService.createFinishedTask(finished_task);
             taskService.delete(taskId);
         }
         return "redirect:/page/allTasks";
     }
 
+    @GetMapping("/finishedTasks")
+    public String getFinishedTasks(Model model) {
+            List finishedTasks = finishedTaskService.getAllFinishedTask();
+            model.addAttribute("finishedTasks",finishedTasks);
+            return "finished-tasks.html";
+        }
 
 }
