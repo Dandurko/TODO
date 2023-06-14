@@ -51,14 +51,14 @@ public class TaskController {
     }
 
 
-    @PostMapping("/taskDetail/{taskId}")
-    public String editTaskDetail(@PathVariable("taskId") Long taskId, @ModelAttribute("task") Task updatedTask) {
+    @PostMapping("/taskDetail/{taskId}/{name}")
+    public String editTaskDetail(@PathVariable("taskId") Long taskId, @PathVariable("name")  String name) {
         Optional<Task> existingTask = taskService.getDetailedTask(taskId);
         if (existingTask.isPresent()) {
             Task task = existingTask.get();
             task.setLastUpdate(new Timestamp(System.currentTimeMillis()));
             // Ponechajte createdDate nezmenené
-            task.setName(updatedTask.getName()); // Prípadne aktualizujte ďalšie vlastnosti úlohy podľa potreby
+            task.setName(name); // Prípadne aktualizujte ďalšie vlastnosti úlohy podľa potreby
             taskService.update(task);
         }
         return "redirect:/page/allTasks";

@@ -17,15 +17,20 @@
         </form>
     </div>
     <div  id="tasks">
-        <div th:each="task: ${tasks}">
-            <div id="date">
-                <div th:text="'created: ' + ${#dates.format(task.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
-                <div th:text="'updated: ' + ${#dates.format(task.lastUpdate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+        <div class="flexTask" th:each="task: ${tasks}">
+            <div class="task" th:id="${task.id}">
+                <input readonly type="text" class="edit-task-name taskInput" th:value="${task.name}"  />
             </div>
-            <a th:href="@{/page/taskDetail/{taskID}(taskID=${task.id})}" class="task"  th:id="${task.id}" th:text="${task.name}"></a>
+            <div class="edit">edit</div>
+            <div class="delete" th:data-task-id="${task.id}">delete</div>
         </div>
+        
     </div>
-    <a  onclick="" href="/page/finishedTasks" class ="anchor" >Finished Tasks</a>
+    <div id="finishedTasksId">
+        <a  onclick="" href="/page/finishedTasks" class ="anchor" >Finished Tasks</a>
+    </div>
 </div>
+  
+<script th:src="@{/index.js}"></script>
 </body>
 </html>
