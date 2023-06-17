@@ -3,24 +3,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Finished Tasks</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" th:href="@{/finishedTasks.css}"/>
+                
 </head>
-<link rel="stylesheet" th:href="@{/index.css}"/>
+
 <body>
-
-<div class="container">
-    <div  id="tasks">
-
-        <div th:each="task: ${finishedTasks}">
-            <div id="date">
-                <div th:text="'created: ' + ${#dates.format(task.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
-                <div th:text="'finished: ' + ${#dates.format(task.finishedDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+    <div class="container">
+    <div class="row d-flex justify-content-center container">
+        <div class="col-md-8">
+          <div class="card-hover-shadow-2x mb-3 card">
+            <div class="card-header-tab card-header">
+              <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i
+                  class="fa fa-tasks"></i>&nbsp;Finished Tasks List</div>
+              
             </div>
-            <div  class="task"  th:id="${task.id}" th:text="${task.name}"></div>
+            <div class="scroll-area-sm">
+              <perfect-scrollbar class="ps-show-limits">
+                <div style="position: static;" class="ps ps--active-y">
+                  <div class="ps-content">
+                    <ul th:each="task: ${finishedTasks}" class=" list-group list-group-flush">
+                      <li class="list-group-item">
+                        <div class="todo-indicator bg-warning"></div>
+                        <div class="widget-content p-0">
+                          <div class="widget-content-wrapper">
+                            <div class="widget-content-left mr-2">
+                            </div>
+                            <div class="widget-content-left">
+                              <div class="widget-heading" th:text="${task.name}">
+                              </div>
+                            </div>
+                          <div class="widget-content-right">
+                                <div>days</div>
+                          </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                </div>
+              </perfect-scrollbar>
+            </div>   
+          </div>
+        </div>
         </div>
     </div>
-    <a  onclick="" href="/page/allTasks" class ="anchor" >All Tasks</a>
-</div>
+  
 </body>
 </html>

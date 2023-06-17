@@ -1,59 +1,36 @@
 document.addEventListener('DOMContentLoaded', function() {
-  let deleteButtons = document.getElementsByClassName('delete');
+  let deleteButtons = document.getElementsByClassName('finish');
 
   for (let i = 0; i < deleteButtons.length; i++) {
       let button = deleteButtons[i];
       button.addEventListener('click', function() {
           let taskId = this.getAttribute('data-task-id');
-          deleteTask(taskId);
+          finishTask(taskId);
       });
   }
 });
 
 
 
-document.addEventListener('DOMContentLoaded', function() {
-  let editButtons = document.getElementsByClassName('edit');
 
+
+document.addEventListener('DOMContentLoaded', function() {
+  let editButtons = document.getElementsByClassName('delete');
   for (let i = 0; i < editButtons.length; i++) {
       let button = editButtons[i];
       button.addEventListener('click', function() {
-          let taskContainer = this.parentNode;
-          toggleEditTask(taskContainer);
+          let taskId =this.getAttribute('data-task-id');
+          console.log(taskId);
+          deleteTask(taskId)
       });
   }
 });
 
 
-
-document.addEventListener('DOMContentLoaded', function() {
-  let editButtons = document.getElementsByClassName('edit-task-name');
-
-  for (let i = 0; i < editButtons.length; i++) {
-      let button = editButtons[i];
-      button.addEventListener('keypress', function() {
-        if (event.key === "Enter") {
-          let taskContainer = this.parentNode;
-          let taskId = taskContainer.getAttribute('id');
-          let editInput = taskContainer.querySelector('.edit-task-name');
-          let name=editInput.value;
-          updateTask(taskId,name)
-        }
-      });
-  }
-});
-
-function toggleEditTask(taskContainer) {
-  let editInput = taskContainer.querySelector('.edit-task-name');
-  editInput.removeAttribute('readonly');
-  editInput.style.backgroundColor = "white";
-  editInput.focus();
-
-}
-function deleteTask(taskId) {
+function finishTask(taskId) {
   // Vytvorte požiadavku na váš endpoint v Springu
   let xhr = new XMLHttpRequest();
-  xhr.open('GET', '/page/taskDelete/' + taskId);
+  xhr.open('GET', '/page/finishTask/' + taskId);
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.onreadystatechange = function() {
       if (xhr.readyState === 4 && xhr.status === 200) {
@@ -70,10 +47,10 @@ function deleteTask(taskId) {
 
 
 
-function updateTask(taskId,name) {
+function deleteTask(taskId) {
   // Vytvorte požiadavku na váš endpoint v Springu
   let xhr = new XMLHttpRequest();
-  xhr.open('POST', '/page/taskDetail/' + taskId+'/'+name);
+  xhr.open('POST', '/page/deleteTask/' + taskId);
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.onreadystatechange = function() {
       if (xhr.readyState === 4 && xhr.status === 200) {
@@ -98,10 +75,13 @@ function restoringEditInput() {
     // Pridanie poslucháča udalostí pre udalosť "blur" na každom textovom poli
     textField.addEventListener('blur', function() {
       // Akcia, ktorú chcete vykonať, keď je textové pole nezamerané
-      textField.style.backgroundColor = "#333";
       textField.setAttribute("readonly", true);
       textField.value = sourceValue;
     });
   });
 }
 restoringEditInput();
+document.addEventListener('DOMContentLoaded', function() {
+  var tooltips = document.querySelectorAll('.tooltipped');
+  M.Tooltip.init(tooltips);
+});

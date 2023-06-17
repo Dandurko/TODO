@@ -3,33 +3,73 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
+    <title>All Tasks</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <link rel="stylesheet" th:href="@{/index.css}"/>
-<body>
+                
+</head>
 
-<div class="container">
-    <div id="newtask">
-        <form th:action="@{/page/saveTask}" th:object="${task}" method="post">
-            <input type="text" name="name" id="name" th:value="${name}" />
-            <button type="submit" id="push">Add</button>
-        </form>
-    </div>
-    <div  id="tasks">
-        <div class="flexTask" th:each="task: ${tasks}">
-            <div class="task" th:id="${task.id}">
-                <input readonly type="text" class="edit-task-name taskInput" th:value="${task.name}"  />
+<body>
+    <div class="container">
+    <div class="row d-flex justify-content-center container">
+        <div class="col-md-8">
+          <div class="card-hover-shadow-2x mb-3 card">
+            <div class="card-header-tab card-header">
+              <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i
+                  class="fa fa-tasks"></i>&nbsp;Tasks List</div>
+              
             </div>
-            <div class="edit">edit</div>
-            <div class="delete" th:data-task-id="${task.id}">delete</div>
+            <div class="scroll-area-sm">
+              <perfect-scrollbar class="ps-show-limits">
+                <div style="position: static;" class="ps ps--active-y">
+                  <div class="ps-content">
+                    <ul th:each="task: ${tasks}" class=" list-group list-group-flush">
+                      <li class="list-group-item">
+                        <div class="todo-indicator bg-warning"></div>
+                        <div class="widget-content p-0">
+                          <div class="widget-content-wrapper">
+                            <div class="widget-content-left mr-2">
+                            </div>
+                            <div class="widget-content-left">
+                              <div class="widget-heading" th:text="${task.name}">
+                              </div>
+                              <div class="widget-subheading"><i th:text="'Created: ' + ${#dates.format(task.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></i></div>
+                            </div>
+                          <div class="widget-content-right">
+                            <button class="border-0 btn-transition btn btn-outline-success finish" th:data-task-id="${task.id}">
+                              <i class="fa fa-check"></i></button>
+                              <button class="border-0 btn-transition btn btn-outline-danger delete" th:data-task-id="${task.id}">
+                             <i class="fa fa-trash"></i>
+                             
+                            </button>
+                          </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                </div>
+              </perfect-scrollbar>
+            </div>
+            <div class="d-block text-right card-footer">
+                <form th:action="@{/page/saveTask}" th:object="${task}" method="post" class="form-inline">
+                  <div class="form-group mr-2">
+                    <input type="text" name="name" id="name" th:value="${name}"  class="form-control" placeholder="Task">
+                  </div>
+                  <div>
+                  <button type="submit" class="btn btn-primary">Add Task</button>
+                </div>
+                </form>
+              </div>
+              
+          </div>
         </div>
-        
+        </div>
     </div>
-    <div id="finishedTasksId">
-        <a  onclick="" href="/page/finishedTasks" class ="anchor" >Finished Tasks</a>
-    </div>
-</div>
   
 <script th:src="@{/index.js}"></script>
 </body>

@@ -51,22 +51,18 @@ public class TaskController {
     }
 
 
-    @PostMapping("/taskDetail/{taskId}/{name}")
-    public String editTaskDetail(@PathVariable("taskId") Long taskId, @PathVariable("name")  String name) {
+    @PostMapping("/deleteTask/{taskId}")
+    public String deleteTask(@PathVariable("taskId") Long taskId) {
         Optional<Task> existingTask = taskService.getDetailedTask(taskId);
         if (existingTask.isPresent()) {
-            Task task = existingTask.get();
-            task.setLastUpdate(new Timestamp(System.currentTimeMillis()));
-            // Ponechajte createdDate nezmenené
-            task.setName(name); // Prípadne aktualizujte ďalšie vlastnosti úlohy podľa potreby
-            taskService.update(task);
+            taskService.delete(taskId);
         }
         return "redirect:/page/allTasks";
     }
 
 
-    @GetMapping("/taskDelete/{taskId}")
-    public String taskDelete(@PathVariable("taskId") Long taskId) {
+    @GetMapping("/finishTask/{taskId}")
+    public String finishTask(@PathVariable("taskId") Long taskId) {
         Optional<Task> existingTask = taskService.getDetailedTask(taskId);
         if (existingTask.isPresent()) {
             Task task = existingTask.get();
@@ -75,7 +71,7 @@ public class TaskController {
             finished_task.setCreatedDate(task.getCreatedDate());
             finished_task.setFinishedDate(new Timestamp(System.currentTimeMillis()));
             finishedTaskService.createFinishedTask(finished_task);
-            taskService.delete(taskId);
+            taskService.finish(taskId);
         }
         return "redirect:/page/allTasks";
     }
