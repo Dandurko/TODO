@@ -26,6 +26,13 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+document.querySelectorAll(".nav-link").forEach((link) => {
+  if (link.href === window.location.href) {
+      link.classList.add("active");
+      link.setAttribute("aria-current", "page");
+  }
+});
+
 
 function finishTask(taskId) {
   // Vytvorte požiadavku na váš endpoint v Springu

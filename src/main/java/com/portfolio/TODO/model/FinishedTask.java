@@ -1,7 +1,10 @@
 package com.portfolio.TODO.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -29,5 +32,14 @@ public class FinishedTask {
     @Column(name = "finished_date", columnDefinition = "DATETIME", nullable = false)
     @LastModifiedDate
     private Timestamp finishedDate;
+
+    @Column(name="time_difference_seconds")
+    private long timeDifferenceSeconds;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "fk_user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private User user;
 
 }

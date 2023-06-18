@@ -1,15 +1,14 @@
 package com.portfolio.TODO.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-
-import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
+
 
 @Entity
 @NoArgsConstructor
@@ -33,9 +32,12 @@ public class Task {
     @CreatedDate
     private Timestamp createdDate;
 
-    @Column(name = "last_update", columnDefinition = "DATETIME", nullable = false)
-    @LastModifiedDate
-    private Timestamp lastUpdate;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "fk_user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private User user;
+
 
 
 

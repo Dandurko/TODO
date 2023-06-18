@@ -21,9 +21,9 @@ public class TaskController {
 
     @Autowired
     FinishedTaskServiceImpl finishedTaskService;
-    @GetMapping("/allTasks")
-    public String getPage(Model model){
-        List tasks = taskService.getAllTask();
+    @GetMapping("/allTasks/{userId}")
+    public String getPage(@PathVariable("userId") Long userId, Model model){
+        List tasks = taskService.getAllTask(userId);
         Task task=new Task();
         model.addAttribute("tasks",tasks);
         model.addAttribute("task",task);
@@ -34,7 +34,6 @@ public class TaskController {
     public String createTask(@ModelAttribute("task") Task task) {
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
         task.setCreatedDate(currentTimestamp);
-        task.setLastUpdate(currentTimestamp);
         taskService.create(task);
         return "redirect:/page/allTasks";
 
@@ -70,6 +69,9 @@ public class TaskController {
             finished_task.setName(task.getName());
             finished_task.setCreatedDate(task.getCreatedDate());
             finished_task.setFinishedDate(new Timestamp(System.currentTimeMillis()));
+            long timeDifferenceMillis = finished_task.getFinishedDate().getTime() - finished_task.getCreatedDate().getTime();
+            long timeDifferenceSeconds = timeDifferenceMillis / 1000;
+            finished_task.setTimeDifferenceSeconds(timeDifferenceSeconds);
             finishedTaskService.createFinishedTask(finished_task);
             taskService.finish(taskId);
         }
@@ -80,6 +82,7 @@ public class TaskController {
     public String getFinishedTasks(Model model) {
             List finishedTasks = finishedTaskService.getAllFinishedTask();
             model.addAttribute("finishedTasks",finishedTasks);
+
             return "finished-tasks.html";
         }
 

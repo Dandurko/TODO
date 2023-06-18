@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>All Tasks</title>
@@ -13,6 +12,7 @@
 </head>
 
 <body>
+<div th:replace="~{navbar.html}"></div>
     <div class="container">
     <div class="row d-flex justify-content-center container">
         <div class="col-md-8">
@@ -56,7 +56,7 @@
               </perfect-scrollbar>
             </div>
             <div class="d-block text-right card-footer">
-                <form th:action="@{/page/saveTask}" th:object="${task}" method="post" class="form-inline">
+                <form th:action="@{/page/saveTask}" th:object="${task}" method="POST" class="form-inline">
                   <div class="form-group mr-2">
                     <input type="text" name="name" id="name" th:value="${name}"  class="form-control" placeholder="Task">
                   </div>
