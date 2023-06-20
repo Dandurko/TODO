@@ -21,3 +21,12 @@
         </div>
     </div>
   </nav>
+  <script>
+    const url =window.location.href;
+    const id= url.charAt(url.length-1);
+    let anchor =document.getElementsByClassName("nav-link");
+    for(let i=0;i<anchor.length;i++) {
+      let href=anchor[i].href;
+      anchor[i].href = anchor[i].href+'/'+id;
+    }
+  </script>

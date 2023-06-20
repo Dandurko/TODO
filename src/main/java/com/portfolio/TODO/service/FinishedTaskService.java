@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface FinishedTaskService {
     public void createFinishedTask(FinishedTask task);
-    public List<FinishedTask> getAllFinishedTask();
+    List<FinishedTask> getAllFinishedTask(Long userId);
 }

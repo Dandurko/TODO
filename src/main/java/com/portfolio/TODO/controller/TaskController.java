@@ -2,8 +2,10 @@ package com.portfolio.TODO.controller;
 
 import com.portfolio.TODO.model.FinishedTask;
 import com.portfolio.TODO.model.Task;
+import com.portfolio.TODO.model.User;
 import com.portfolio.TODO.service.FinishedTaskServiceImpl;
 import com.portfolio.TODO.service.TaskServiceImpl;
+import com.portfolio.TODO.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,9 @@ public class TaskController {
     TaskServiceImpl taskService;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     FinishedTaskServiceImpl finishedTaskService;
     @GetMapping("/allTasks/{userId}")
     public String getPage(@PathVariable("userId") Long userId, Model model){
@@ -27,41 +32,34 @@ public class TaskController {
         Task task=new Task();
         model.addAttribute("tasks",tasks);
         model.addAttribute("task",task);
+        model.addAttribute("userId",userId);
         return "index.html";
     }
 
-    @PostMapping("/saveTask")
-    public String createTask(@ModelAttribute("task") Task task) {
+    @PostMapping("/saveTask/{userId}")
+    public String createTask(@PathVariable("userId") Long userId,@ModelAttribute("task") Task task) {
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
         task.setCreatedDate(currentTimestamp);
+        Optional<User> user=userService.getUserById(userId);
+        task.setUser(user.orElse(null));
         taskService.create(task);
-        return "redirect:/page/allTasks";
+        return "redirect:/page/allTasks/"+userId;
 
     }
 
 
-
-
-    @GetMapping("/taskDetail/{taskId}")
-    public String getTaskDetail(@PathVariable("taskId") Long taskId, Model model) {
-        Optional<Task> task = taskService.getDetailedTask(taskId);
-        model.addAttribute("task", task.orElse(null)); // Použite .orElse(null), ak Optional je prázdny
-        return "task-detail"; // Nemusíte uvádzať príponu .html
-    }
-
-
-    @PostMapping("/deleteTask/{taskId}")
-    public String deleteTask(@PathVariable("taskId") Long taskId) {
+    @GetMapping("/deleteTask/{taskId}/{userId}")
+    public String deleteTask(@PathVariable("taskId") Long taskId,@PathVariable("userId") Long userId) {
         Optional<Task> existingTask = taskService.getDetailedTask(taskId);
         if (existingTask.isPresent()) {
             taskService.delete(taskId);
         }
-        return "redirect:/page/allTasks";
+        return "redirect:/page/allTasks/"+userId;
     }
 
 
-    @GetMapping("/finishTask/{taskId}")
-    public String finishTask(@PathVariable("taskId") Long taskId) {
+    @GetMapping("/finishTask/{taskId}/{userId}")
+    public String finishTask(@PathVariable("taskId") Long taskId,@PathVariable("userId") Long userId) {
         Optional<Task> existingTask = taskService.getDetailedTask(taskId);
         if (existingTask.isPresent()) {
             Task task = existingTask.get();
@@ -72,17 +70,18 @@ public class TaskController {
             long timeDifferenceMillis = finished_task.getFinishedDate().getTime() - finished_task.getCreatedDate().getTime();
             long timeDifferenceSeconds = timeDifferenceMillis / 1000;
             finished_task.setTimeDifferenceSeconds(timeDifferenceSeconds);
+            Optional<User> user=userService.getUserById(userId);
+            finished_task.setUser(user.orElse(null));
             finishedTaskService.createFinishedTask(finished_task);
             taskService.finish(taskId);
         }
-        return "redirect:/page/allTasks";
+        return "redirect:/page/allTasks/"+userId;
     }
 
-    @GetMapping("/finishedTasks")
-    public String getFinishedTasks(Model model) {
-            List finishedTasks = finishedTaskService.getAllFinishedTask();
+    @GetMapping("/finishedTasks/{userId}")
+    public String getFinishedTasks(@PathVariable("userId") Long userId, Model model) {
+            List finishedTasks = finishedTaskService.getAllFinishedTask(userId);
             model.addAttribute("finishedTasks",finishedTasks);
-
             return "finished-tasks.html";
         }
 

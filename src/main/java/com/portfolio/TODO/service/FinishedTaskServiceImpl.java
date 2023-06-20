@@ -16,8 +16,9 @@ public class FinishedTaskServiceImpl  implements FinishedTaskService{
     public void createFinishedTask(FinishedTask task) {
         finishedTaskRepo.save(task);
     }
+
     @Override
-    public List<FinishedTask> getAllFinishedTask() {
-        return finishedTaskRepo.findAll();
+    public List<FinishedTask> getAllFinishedTask(Long userId) {
+        return finishedTaskRepo.findByUserId(userId);
     }
 }

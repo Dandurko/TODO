@@ -1,11 +1,14 @@
+
+
 document.addEventListener('DOMContentLoaded', function() {
   let deleteButtons = document.getElementsByClassName('finish');
-
+  const urls =window.location.href;
+  let userId= urls.charAt(urls.length-1);
   for (let i = 0; i < deleteButtons.length; i++) {
       let button = deleteButtons[i];
       button.addEventListener('click', function() {
           let taskId = this.getAttribute('data-task-id');
-          finishTask(taskId);
+          finishTask(taskId,userId);
       });
   }
 });
@@ -15,13 +18,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 document.addEventListener('DOMContentLoaded', function() {
+  const urls =window.location.href;
+  let userId= urls.charAt(urls.length-1);
   let editButtons = document.getElementsByClassName('delete');
   for (let i = 0; i < editButtons.length; i++) {
       let button = editButtons[i];
       button.addEventListener('click', function() {
           let taskId =this.getAttribute('data-task-id');
           console.log(taskId);
-          deleteTask(taskId)
+          deleteTask(taskId,userId)
       });
   }
 });
@@ -34,10 +39,10 @@ document.querySelectorAll(".nav-link").forEach((link) => {
 });
 
 
-function finishTask(taskId) {
+function finishTask(taskId,userId) {
   // Vytvorte požiadavku na váš endpoint v Springu
   let xhr = new XMLHttpRequest();
-  xhr.open('GET', '/page/finishTask/' + taskId);
+  xhr.open('GET', '/page/finishTask/'+ taskId + '/' + userId);
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.onreadystatechange = function() {
       if (xhr.readyState === 4 && xhr.status === 200) {
@@ -54,10 +59,10 @@ function finishTask(taskId) {
 
 
 
-function deleteTask(taskId) {
+function deleteTask(taskId,userId) {
   // Vytvorte požiadavku na váš endpoint v Springu
   let xhr = new XMLHttpRequest();
-  xhr.open('POST', '/page/deleteTask/' + taskId);
+  xhr.open('GET', '/page/deleteTask/' + taskId + '/' + userId);
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.onreadystatechange = function() {
       if (xhr.readyState === 4 && xhr.status === 200) {
