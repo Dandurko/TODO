@@ -1,11 +1,14 @@
 package com.portfolio.TODO.controller;
 
+import com.portfolio.TODO.model.DeletedTask;
 import com.portfolio.TODO.model.FinishedTask;
 import com.portfolio.TODO.model.Task;
 import com.portfolio.TODO.model.User;
+import com.portfolio.TODO.service.DeletedTaskServiceImpl;
 import com.portfolio.TODO.service.FinishedTaskServiceImpl;
 import com.portfolio.TODO.service.TaskServiceImpl;
 import com.portfolio.TODO.service.UserService;
+import com.portfolio.TODO.statistic.Statistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,10 +22,15 @@ import java.util.*;
 public class TaskController {
 
     @Autowired
+    DeletedTaskServiceImpl deletedTaskService;
+    @Autowired
     TaskServiceImpl taskService;
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    Statistics stat;
 
     @Autowired
     FinishedTaskServiceImpl finishedTaskService;
@@ -33,6 +41,7 @@ public class TaskController {
         model.addAttribute("tasks",tasks);
         model.addAttribute("task",task);
         model.addAttribute("userId",userId);
+        stat.getAllTasks(userId);
         return "index.html";
     }
 
@@ -52,6 +61,15 @@ public class TaskController {
     public String deleteTask(@PathVariable("taskId") Long taskId,@PathVariable("userId") Long userId) {
         Optional<Task> existingTask = taskService.getDetailedTask(taskId);
         if (existingTask.isPresent()) {
+            Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+            Task task = existingTask.get();
+            DeletedTask deletedTask = new DeletedTask();
+            deletedTask.setName(task.getName());
+            deletedTask.setDeletedDate(currentTimestamp);
+            deletedTask.setCreatedDate(task.getCreatedDate());
+            Optional<User> user=userService.getUserById(userId);
+            deletedTask.setUser(user.orElse(null));
+            deletedTaskService.createDeletedTask(deletedTask);
             taskService.delete(taskId);
         }
         return "redirect:/page/allTasks/"+userId;

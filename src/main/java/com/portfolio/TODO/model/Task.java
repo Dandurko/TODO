@@ -13,11 +13,9 @@ import java.sql.Timestamp;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="tasks")
 @Data
 @Builder
-@Setter
-@Getter
+@Table(name="tasks")
 public class Task {
 
 
