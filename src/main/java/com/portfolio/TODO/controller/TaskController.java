@@ -98,9 +98,9 @@ public class TaskController {
 
     @GetMapping("/finishedTasks/{userId}")
     public String getFinishedTasks(@PathVariable("userId") Long userId, Model model) {
-            List finishedTasks = finishedTaskService.getAllFinishedTask(userId);
-            model.addAttribute("finishedTasks",finishedTasks);
-            return "finished-tasks.html";
-        }
+        List finishedTasks = finishedTaskService.getAllFinishedTask(userId);
+        model.addAttribute("finishedTasks",finishedTasks);
+        return "finished-tasks.html";
+    }
 
 }

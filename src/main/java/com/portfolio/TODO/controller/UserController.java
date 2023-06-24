@@ -46,7 +46,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String postLogin(@ModelAttribute("username") String username, @ModelAttribute("password") String password, RedirectAttributes redirectAttributes){
-        User user=userRepository.findByUsername(username);
+        User user=userRepository.findUserByUsername(username);
         if (user!=null && passwordEncoder.matches(password,user.getPassword())){
             Long userId = user.getId();
             redirectAttributes.addAttribute("userId", userId);
