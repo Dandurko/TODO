@@ -22,8 +22,6 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-
-
     @GetMapping("/registration")
     public String getRegistration(Model model){
         model.addAttribute("user", new User());

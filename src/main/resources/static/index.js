@@ -93,7 +93,3 @@ function restoringEditInput() {
   });
 }
 restoringEditInput();
-document.addEventListener('DOMContentLoaded', function() {
-  var tooltips = document.querySelectorAll('.tooltipped');
-  M.Tooltip.init(tooltips);
-});

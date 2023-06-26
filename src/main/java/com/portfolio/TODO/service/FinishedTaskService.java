@@ -6,6 +6,6 @@ import com.portfolio.TODO.model.Task;
 import java.util.List;
 
 public interface FinishedTaskService {
-    public void createFinishedTask(FinishedTask task);
+    void createFinishedTask(FinishedTask task);
     List<FinishedTask> getAllFinishedTask(Long userId);
 }

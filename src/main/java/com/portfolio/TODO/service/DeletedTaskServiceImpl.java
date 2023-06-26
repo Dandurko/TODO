@@ -5,8 +5,6 @@ import com.portfolio.TODO.repository.DeletedTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class DeletedTaskServiceImpl implements DeletedTaskService{
     @Autowired
@@ -14,11 +12,6 @@ public class DeletedTaskServiceImpl implements DeletedTaskService{
     @Override
     public void createDeletedTask(DeletedTask task) {
         repository.save(task);
-
     }
 
-    @Override
-    public List<DeletedTask> getAllDeletedTask(Long userId) {
-        return repository.findByUserId(userId);
-    }
 }

@@ -5,6 +5,6 @@ import com.portfolio.TODO.model.User;
 import java.util.Optional;
 
 public interface UserService  {
-    public void createUser(User user);
-    public Optional<User> getUserById(Long id);
+    void createUser(User user);
+    Optional<User> getUserById(Long id);
 }
